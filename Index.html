@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Booking Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        accent: '#8b5cf6',
+                        dark: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow-md fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="text-2xl font-bold text-primary flex items-center">
+                <i class="fas fa-plane-departure mr-2"></i>TravelUI
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#" class="font-medium hover:text-primary transition-colors"><i class="fas fa-home mr-1"></i> Home</a>
+                <a href="#" class="font-medium hover:text-primary transition-colors"><i class="fas fa-plane mr-1"></i> Flights</a>
+                <a href="#" class="font-medium hover:text-primary transition-colors"><i class="fas fa-hotel mr-1"></i> Hotels</a>
+                <a href="#" class="font-medium hover:text-primary transition-colors"><i class="fas fa-car mr-1"></i> Cars</a>
+                <a href="#" class="font-medium hover:text-primary transition-colors"><i class="fas fa-umbrella-beach mr-1"></i> Packages</a>
+            </nav>
+            <!-- <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-gray-600 hover:text-primary transition-colors">
+                    <i class="far fa-user-circle text-xl"></i>
+                </a>
+                <a href="#" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                    Sign In
+                </a>
+            </div> -->
+            <button class="md:hidden text-2xl" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobileMenu">
+            <nav class="flex flex-col px-4 py-2">
+                <a href="#" class="py-2 font-medium hover:text-primary transition-colors"><i class="fas fa-home mr-1"></i> Home</a>
+                <a href="#" class="py-2 font-medium hover:text-primary transition-colors"><i class="fas fa-plane mr-1"></i> Flights</a>
+                <a href="#" class="py-2 font-medium hover:text-primary transition-colors"><i class="fas fa-hotel mr-1"></i> Hotels</a>
+                <a href="#" class="py-2 font-medium hover:text-primary transition-colors"><i class="fas fa-car mr-1"></i> Cars</a>
+                <a href="#" class="py-2 font-medium hover:text-primary transition-colors"><i class="fas fa-umbrella-beach mr-1"></i> Packages</a>
+                <!-- <a href="#" class="py-2 mt-2 w-full text-center bg-primary text-white px-4 rounded-full hover:bg-blue-700 transition-colors">
+                    Sign In
+                </a> -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Spacer for fixed header -->
+    <div class="h-14"></div>
+
+    <!-- Hero Section with Background -->
+    <div class="relative bg-gradient-to-r from-blue-600 to-indigo-800 py-20">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0 opacity-20">
+            <!-- Replacing placeholder with real Pexels image -->
+            <div class="w-full h-full bg-[url('https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg')] bg-cover bg-center"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center text-white mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold mb-3">Discover Your Perfect Journey</h1>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto">Book flights, hotels, and rental cars at the best prices for your next adventure</p>
+            </div>
+            
+            <!-- Booking Card -->
+            <div class="bg-white rounded-xl shadow-2xl max-w-6xl mx-auto overflow-hidden">
+                <!-- Tabs -->
+                <div class="flex border-b">
+                    <button class="tab-btn flex-1 py-4 px-6 bg-primary text-white font-medium flex items-center justify-center" data-tab="flights-tab">
+                        <i class="fas fa-plane-departure mr-2"></i> Flights
+                    </button>
+                    <button class="tab-btn flex-1 py-4 px-6 bg-white text-gray-700 hover:bg-gray-100 font-medium flex items-center justify-center transition-colors" data-tab="hotels-tab">
+                        <i class="fas fa-hotel mr-2"></i> Hotels
+                    </button>
+                    <button class="tab-btn flex-1 py-4 px-6 bg-white text-gray-700 hover:bg-gray-100 font-medium flex items-center justify-center transition-colors" data-tab="cars-tab">
+                        <i class="fas fa-car mr-2"></i> Cars
+                    </button>
+                    <button class="tab-btn flex-1 py-4 px-6 bg-white text-gray-700 hover:bg-gray-100 font-medium flex items-center justify-center transition-colors" data-tab="packages-tab">
+                        <i class="fas fa-umbrella-beach mr-2"></i> Packages
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <!-- Flights Tab Content -->
+                <div id="flights-tab" class="tab-content p-6 md:p-8 block">
+                    <!-- Trip Type Selection -->
+                    <div class="flex space-x-6 mb-6">
+                        <label class="flex items-center">
+                            <input type="radio" name="tripType" checked class="form-radio text-primary h-5 w-5">
+                            <span class="ml-2">Round Trip</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="tripType" class="form-radio text-primary h-5 w-5">
+                            <span class="ml-2">One Way</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="tripType" class="form-radio text-primary h-5 w-5">
+                            <span class="ml-2">Multi-City</span>
+                        </label>
+                    </div>
+
+                    <!-- Route Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">From</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-plane-departure text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Airport" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">To</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-plane-arrival text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Airport" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Departure</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Return</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Passenger Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Travelers</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user-friends text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>1 Adult</option>
+                                    <option>2 Adults</option>
+                                    <option>3 Adults</option>
+                                    <option>4 Adults</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-chair text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>Economy</option>
+                                    <option>Premium Economy</option>
+                                    <option>Business</option>
+                                    <option>First Class</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Promo Code</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-tag text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="Enter code" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-center">
+                        <button class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center">
+                            <i class="fas fa-search mr-2"></i> Search Flights
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hotels Tab Content -->
+                <div id="hotels-tab" class="tab-content p-6 md:p-8 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Hotel" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Number of Rooms</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-door-open text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>1 Room</option>
+                                    <option>2 Rooms</option>
+                                    <option>3 Rooms</option>
+                                    <option>4+ Rooms</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Check In</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Check Out</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Guests</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>1 Guest</option>
+                                    <option>2 Guests</option>
+                                    <option>3 Guests</option>
+                                    <option>4+ Guests</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Hotel Rating</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-star text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>Any Rating</option>
+                                    <option>3+ Stars</option>
+                                    <option>4+ Stars</option>
+                                    <option>5 Stars</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="flex justify-center">
+                        <button class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center">
+                            <i class="fas fa-search mr-2"></i> Search Hotels
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cars Tab Content -->
+                <div id="cars-tab" class="tab-content p-6 md:p-8 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Pick-up Location</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Airport" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Drop-off Location</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Airport" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Pick-up Date</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Drop-off Date</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Car Type</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-car text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>Any Category</option>
+                                    <option>Economy</option>
+                                    <option>Mid-size</option>
+                                    <option>SUV</option>
+                                    <option>Luxury</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Driver Age</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-id-card text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>25+ years</option>
+                                    <option>21-24 years</option>
+                                    <option>18-20 years</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="flex justify-center">
+                        <button class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center">
+                            <i class="fas fa-search mr-2"></i> Search Cars
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Packages Tab Content -->
+                <div id="packages-tab" class="tab-content p-6 md:p-8 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-globe text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Country" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Origin</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-home text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="City or Airport" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Departure Date</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Return Date</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="far fa-calendar-alt text-gray-400"></i>
+                                </div>
+                                <input type="date" class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Travelers</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>1 Person</option>
+                                    <option>2 People</option>
+                                    <option>3 People</option>
+                                    <option>4+ People</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Package Type</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-suitcase text-gray-400"></i>
+                                </div>
+                                <select class="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none">
+                                    <option>All Inclusive</option>
+                                    <option>Flight + Hotel</option>
+                                    <option>Flight + Hotel + Car</option>
+                                    <option>Cruise</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="flex justify-center">
+                        <button class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center">
+                            <i class="fas fa-search mr-2"></i> Search Packages
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white">
+        <div class="container mx-auto px-4 pt-12 pb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-plane-departure mr-2"></i>TravelUI
+                    </h3>
+                    <p class="mb-4">Making travel planning simple and enjoyable since 2020. Your trusted companion for all your travel needs.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-gray-700 hover:bg-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-gray-700 hover:bg-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-gray-700 hover:bg-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-gray-700 hover:bg-primary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> About Us</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Careers</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Travel Blog</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> FAQs</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Contact Us</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Booking Tips</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2"></i> Travel Insurance</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1.5 mr-3 text-primary"></i>
+                            <span>123 Travel Street, Suite 100<br>New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3 text-primary"></i>
+                            <span>+1 (111) 222-3333</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-primary"></i>
+                            <span>test@travelui.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-clock mr-3 text-primary"></i>
+                            <span>24/7 Customer Support</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2025 TravelUI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Tab Functionality
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show selected tab content
+                    document.getElementById(tabId).classList.remove('hidden');
+                    
+                    // Update active tab button styling
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('bg-primary', 'text-white');
+                        btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                    });
+                    
+                    this.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                    this.classList.add('bg-primary', 'text-white');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
